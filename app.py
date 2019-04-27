@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, json, jsonify
+from time import sleep
 from multiprocessing import Value
-
+import threading
 import requests
 import docker 
 
@@ -37,7 +38,7 @@ def post_crash():
 		return response
 
 @app.route("/api/v1/_count", methods=['GET'])
-def get_health():
+def get_count():
 	with count.get_lock():
 		#count.value=count.value+1
 		port=count.value%no_of_containers
@@ -49,7 +50,7 @@ def get_health():
 			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
 		return response
 @app.route("/api/v1/_count", methods=['DELETE'])
-def delete_categories():
+def delete_count():
 	with count.get_lock():
 		#count.value=count.value+1
 		port=count.value%no_of_containers
@@ -156,7 +157,7 @@ def post_acts():
 		return response
 
 @app.route('/api/v1/acts/count',methods=['GET'])
-def get_categories():
+def get_acts_count():
 	with count.get_lock():
 		count.value=count.value+1
 		port=count.value%no_of_containers
@@ -174,6 +175,7 @@ def get_categories():
 
 
 def fault_tolerence():
+	print("thread start")
 	client=docker.from_env()
 	container_list=client.containers.list()	
 	cont_count=0
@@ -183,11 +185,12 @@ def fault_tolerence():
 			p=a.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
 			r=requests.get('http://localhost:'+str(p)+"/api/v1/_health")
 			if r.status_code!=200:
-				a.stop()
-				client.containers.run(image='acts',detach=True,links={'db':'db'},ports={'80/tcp':p},name='acts'+str(cont_count))
+				a.kill()
+				client.containers.run(image='acts',detach=True,links={'db':'db'},ports={'80/tcp':p})
 			cont_count=cont_count+1
 
 def fault_thread():
+	print("startwd")
 	while True:
 		sleep(1)
 		fault_tolerence()
@@ -198,5 +201,7 @@ def fault_thread():
 
 
 if __name__=='__main__':
-	app.run(host='0.0.0.0',port='80',debug=True)
 	
+	t1=threading.Thread(target=fault_thread)
+	t1.start()
+	app.run(host='0.0.0.0',port='80',debug=True)
