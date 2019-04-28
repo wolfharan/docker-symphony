@@ -21,8 +21,13 @@ def autoscale():
 			cont_flag=-(cont_to_start)
 			for a1 in container_list2:
 				try:
+					print("container:",a1)
 					p=a1.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
-					if cont_flag!=0 and p==( 8000 + (no_of_containers-1)):
+					print("port :" ,p)
+					print("Number of containers",no_of_containers)
+					print("port number to delete", 8000+no_of_containers-1)
+					print("truth of p",int(p)==int( 8000 + no_of_containers-1))
+					if cont_flag!=0 and int(p)==int( 8000 + (no_of_containers-1)):
 						print("container del")
 						a1.kill()
 						no_of_containers=no_of_containers-1
@@ -301,7 +306,7 @@ def fault_tolerence():
 	with count.get_lock():
 		for a in container_list:
 			if(cont_count<no_of_containers):
-				print("in loop")
+				#print("in loop")
 				try:
 					p=a.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
 					r=requests.get('http://localhost:'+str(p)+"/api/v1/_health")
