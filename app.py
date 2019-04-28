@@ -12,17 +12,20 @@ def autoscale():
 	global no_of_containers
 	with count.get_lock():
 		cont_to_run=int(count.value/20)+1
+		
 		cont_to_start=cont_to_run-no_of_containers
 		if(cont_to_start<0):
 			client2=docker.from_env()
 			container_list2=client.containers.list()
 			for cont in container_list2:
 				if(no_of_containers<cont_to_start):
+					print("container del")
 					cont.kill()
 					no_of_containers=no_of_containers-1
 		else:
 			for i in range(cont_to_start):
 				client1=docker.from_env()
+				print("container start ")
 				client1.containers.run(image='acts',detach=True,links={'db':'db'},ports={'80/tcp':8000+(no_of_containers)})
 				print(8000+no_of_containers)
 				no_of_containers=no_of_containers+1
@@ -32,7 +35,7 @@ def autoscale_thread():
 	print("autoscale_start")
 	while True:
 		autoscale()
-		sleep(120)
+		sleep(100)
 		
 t2=threading.Thread(target=autoscale_thread)
 
@@ -96,7 +99,10 @@ def get_categories():
 	with count.get_lock():
 		count.value=count.value+1
 		if count.value==1:
-			t2.start()
+			try:
+				t2.start()
+			except:
+				pass
 		port=count.value%no_of_containers
 		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
 		try:
@@ -110,6 +116,8 @@ def get_categories():
 def post_categories():
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
 		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
@@ -120,6 +128,8 @@ def post_categories():
 def delete_categories(categoryName):
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
 		return json.dumps({}),mid_response.status_code
@@ -128,6 +138,8 @@ def delete_categories(categoryName):
 def get_catefories_acts(categoryName):
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
 		try:
@@ -140,6 +152,8 @@ def get_catefories_acts(categoryName):
 def get_catefories_acts_count(categoryName):
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
 		try:
@@ -154,6 +168,8 @@ def get_catefories_acts_count(categoryName):
 def get_catefories_acts_count_100(categoryName,startRange,endRange):
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
 		try:
@@ -167,6 +183,8 @@ def get_catefories_acts_count_100(categoryName,startRange,endRange):
 def upvote_act():
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
 		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
@@ -177,6 +195,8 @@ def upvote_act():
 def delete_acts(actid):
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
 		return json.dumps({}),mid_response.status_code
@@ -185,6 +205,8 @@ def delete_acts(actid):
 def post_acts():
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
 		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
@@ -194,6 +216,8 @@ def post_acts():
 def get_acts_count():
 	with count.get_lock():
 		count.value=count.value+1
+		if count.value==1:
+			t2.start()
 		port=count.value%no_of_containers
 		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
 		try:
