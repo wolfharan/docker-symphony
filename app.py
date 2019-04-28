@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 from flask import Flask, render_template, request, json, jsonify
 from time import sleep
 from multiprocessing import Value
@@ -198,10 +201,27 @@ def fault_thread():
 
 
 
+def autoscale():
+	global no_of_containers
+	with count.get_lock():
+		cont_to_start=int(count.value/20)
+		for i in range(cont_to_start):
+			client.containers.run(image='acts',detach=True,links={'db':'db'},ports={'80/tcp':8000+(no_of_containers)})
+			print(8000+no_of_containers)
+			no_of_containers=no_of_containers+1
+
+
+def autoscale_thread():
+	print(autoscale_start)
+	while True:
+		sleep(120)
+		autoscale()
 
 
 if __name__=='__main__':
 	
 	t1=threading.Thread(target=fault_thread)
+	t2=threading.Thread(target=autoscale_thread)
+	t2.start()
 	t1.start()
 	app.run(host='0.0.0.0',port='80',debug=True)
