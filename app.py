@@ -19,6 +19,13 @@ def autoscale():
 			client2=docker.from_env()
 			container_list2=client2.containers.list()
 			cont_flag=-(cont_to_start)
+			cont_del_list=[]
+			temp=no_of_containers
+			while(cont_flag!=0):
+				cont_del_list.append(int(8000+temp-1))
+				print("appended",8000+temp-1)
+				temp=temp-1
+				cont_flag=cont_flag-1
 			for a1 in container_list2:
 				try:
 					print("container:",a1)
@@ -27,11 +34,11 @@ def autoscale():
 					print("Number of containers",no_of_containers)
 					print("port number to delete", 8000+no_of_containers-1)
 					print("truth of p",int(p)==int( 8000 + no_of_containers-1))
-					if cont_flag!=0 and int(p)==int( 8000 + (no_of_containers-1)):
-						print("container del")
+					if int(p) in cont_del_list:
+						print("container deleted in port :",int(p))
 						a1.kill()
 						no_of_containers=no_of_containers-1
-						cont_flag=cont_flag-1
+						
 				except:
 					pass
 			
