@@ -28,17 +28,17 @@ def autoscale():
 				print("appended",8000+temp-1)
 				temp=temp-1
 				cont_flag=cont_flag-1
-			for a1 in container_list2:
+			for container in container_list2:
 				try:
-					print("container:",a1)
-					p=a1.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
+					print("container:",container)
+					p=container.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
 					print("port :" ,p)
 					print("Number of containers",curr_no_of_containers)
 					print("port number to delete", 8000+curr_no_of_containers-1)
 					print("truth of p",int(p)==int( 8000 + curr_no_of_containers-1))
 					if int(p) in cont_del_list:
 						print("container deleted in port :",int(p))
-						a1.kill()
+						container.kill()
 						curr_no_of_containers=curr_no_of_containers-1
 						
 				except:
@@ -77,8 +77,8 @@ curr_no_of_containers=1
 @app.route('/',defaults={'path':''})
 @app.route('/<path:path>')
 def orc_engine(path):
+	global first_flag
 	if request.method=='GET':
-		global first_flag
 		if count.value==0 and first_flag==0:
 			try:
 				t2.start()
@@ -97,7 +97,6 @@ def orc_engine(path):
 				response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype="application/json")
 			return response
 	elif request.method=='POST':
-		global first_flag
 		if count.value==0 and first_flag==0:
 			try:
 				t2.start()
@@ -111,7 +110,6 @@ def orc_engine(path):
 			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
 			return response
 	elif request.method=='DELETE':
-		global first_flag
 		if count.value==0 and first_flag==0:
 			try:
 				t2.start()
