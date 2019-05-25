@@ -71,233 +71,62 @@ app=Flask(__name__)
 count=Value('i',0)
 no_of_containers=1
 
-@app.route("/api/v1/_health", methods=['GET'])
-def get_health():
-	with count.get_lock():
-		#count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype='application/json')
-		except:
+
+
+@app.route('/',defaults={'path':''})
+@app.route('/<path:path>')
+def orc_engine(path):
+	if request.method=='GET':
+		global first_flag
+		if count.value==0 and first_flag==0:
+			try:
+				t2.start()
+				first_flag=1
+			except:
+				pass
+
+		with count.get_lock():
+			count.value=count.value+1
+			port=count.value%no_of_containers
+			mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
+			try:
+				data=mid_response.json()
+				response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype="application/json")
+			except:
+				response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype="application/json")
+			return response
+	elif request.method=='POST':
+		global first_flag
+		if count.value==0 and first_flag==0:
+			try:
+				t2.start()
+				first_flag=1
+			except:
+				pass
+		with count.get_lock():
+			count.value=count.value+1
+			port=count.value%no_of_containers
+			mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
 			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-@app.route("/api/v1/_crash",methods=['POST'])
-def post_crash():
-	with count.get_lock():
-		#count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
-		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-
-@app.route("/api/v1/_count", methods=['GET'])
-def get_count():
-	with count.get_lock():
-		#count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype='application/json')
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-@app.route("/api/v1/_count", methods=['DELETE'])
-def delete_count():
-	with count.get_lock():
-		#count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
-		return json.dumps({}),mid_response.status_code
+			return response
+	elif request.method=='DELETE':
+		global first_flag
+		if count.value==0 and first_flag==0:
+			try:
+				t2.start()
+				first_flag=1
+			except:
+				pass
+		with count.get_lock():
+			count.value=count.value+1
+			port=count.value%no_of_containers
+			mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
+			return json.dumps({}),mid_response.status_code
 
 
 
-@app.route('/api/v1/categories', methods = ['GET'])
-def get_categories():
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		
-		port=count.value%no_of_containers
-		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype='application/json')
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-
-@app.route('/api/v1/categories', methods = ['POST'])
-def post_categories():
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
-		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
 
 
-@app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
-def delete_categories(categoryName):
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
-		return json.dumps({}),mid_response.status_code
-
-@app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
-def get_catefories_acts(categoryName):
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype="application/json")
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype="application/json")
-		return response
-@app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
-def get_catefories_acts_count(categoryName):
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype="application/json")
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype="application/json")
-		return response
-
-
-@app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
-def get_catefories_acts_count_100(categoryName,startRange,endRange):
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get("http://localhost:"+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype="application/json")
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype="application/json")
-		return response
-
-@app.route('/api/v1/acts/upvote', methods = ['POST'])
-def upvote_act():
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
-		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-
-
-@app.route('/api/v1/acts/<actid>', methods = ['DELETE'])
-def delete_acts(actid):
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.delete("http://localhost:"+str(8000+port)+str(request.full_path))
-		return json.dumps({}),mid_response.status_code
-
-@app.route('/api/v1/acts', methods = ['POST'])
-def post_acts():
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.post(url="http://localhost:"+str(8000+port)+str(request.full_path),json=request.get_json())
-		response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
-
-@app.route('/api/v1/acts/count',methods=['GET'])
-def get_acts_count():
-	global first_flag
-	if count.value==0 and first_flag==0:
-		try:
-			t2.start()
-			first_flag=1
-		except:
-			pass
-
-	with count.get_lock():
-		count.value=count.value+1
-		port=count.value%no_of_containers
-		mid_response=requests.get('http://localhost:'+str(8000+port)+str(request.full_path))
-		try:
-			data=mid_response.json()
-			response=app.response_class(response=json.dumps(data),status=mid_response.status_code,mimetype='application/json')
-		except:
-			response=app.response_class(response=json.dumps({}),status=mid_response.status_code,mimetype='application/json')
-		return response
 
 
 
