@@ -56,7 +56,7 @@ sudo nohup python3 app.py
 
 * [Python3](https://docs.python.org/3/) :snake:
 * [Flask](http://flask.pocoo.org/) 
-* [Requests](https://pypi.org/project/requests/) 
+* [Requests](https://pypi.org/project/requests/) :turtle:
 * [Python Docker SDK](https://docker-py.readthedocs.io/en/stable/) :whale:
 
 ## License
