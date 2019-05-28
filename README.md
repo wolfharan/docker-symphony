@@ -8,9 +8,9 @@ Docker symphony is a simple docker container orchestrator for containers running
 2. Checks the number of requests recieved in last t seconds (default is 120s, i.e 2 minutes), if the number of requests exceed base\_scale\_count (default is 20) a new container is started. If number of requests exceed base\_scale\_count\*2 , then 2 new containers are started and so on.
 3. The orchestrator must make requests to the health check API implemented in the application code running in the containers, if the health is not OK ( i.e is if the API doesn't return 200) the container is killed and a new container is start. This must be done every 1 second.
 
-## Where can you use this?
+## Where can I use this?
 
-You can use this to orchestrate the **containers running REST API's** on a single server instance. (eg :- AWS EC2 instance)
+You can use this to orchestrate  **containers running REST API's** on a single server instance. (eg :- AWS EC2 instance)
 Supported HTTP requests are as follows:
 - GET
 - POST
@@ -21,88 +21,44 @@ Supported HTTP requests are as follows:
 Give examples
 ```
 
-## Prerequisites and things to do :-
+## Prerequisites 
 - Python3
 ```
 sudo apt install python3 
 ```
 - pip3
-''' sudo apt install python3-pip '''
+``` sudo apt install python3-pip ```
 - Install requirements for the code using 
-''' pip3 install -r requirements '''
+``` pip3 install -r requirements ```
 or 
-''' python3 -m pip install -r requirements '''
-- Before you run the orchestrator, you need to do the following things to your REST API code running on docker containers -
-  - implement the health check API with your other API's at the route - /api/v1/_health ( or find /api/v1/_health in app.py and replace with the route of your choice ).The health check API could check if the filesystem is functioning properly if you are using the filesystem to store data or it could be checking if the database connection is still active. 
+``` python3 -m pip install -r requirements ```
+- Before you run the orchestrator, you need to do the following things to your REST API code running on docker containers: implement the health check API with your other API's at the route - /api/v1/_health ( or find /api/v1/_health i.e [line 171](https://github.com/wolfharan/docker-symphony/blob/2518bb795f291f837d0f58e15531d66884d78f0e/app.py#L171) in app.py and replace with the route of your choice ).The health check API could check if the filesystem is functioning properly if you are using the filesystem to store data or it could be checking if the database connection is still active. 
+- Make sure you REST API application container is running before you run the orchestrator. 
 
 
 
-Say what the step will be
+## Running the orchestrator
 
+You can run it like you run any other python code, The output will be show on the command line and you can stop the process using CTRL + C.
 ```
-Give the example
+sudo python3 app.py
 ```
-
-And repeat
-
+or you could nohup or No Hangups to run the code, this will run the orchestrator in the background. This way, the code keeps running even after you exit the terminal and all the output will appended to nohup.out in the same directory as the code.
 ```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+sudo nohup python3 app.py
 ```
 
-### And coding style tests
+## Languages and Libraries Used
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* [Python3](https://docs.python.org/3/) 
+* [Flask](http://flask.pocoo.org/) 
+* [Requests](https://pypi.org/project/requests/) 
+* [Python Docker SDK](https://docker-py.readthedocs.io/en/stable/) 
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Copyright (c) 2019
 
 
