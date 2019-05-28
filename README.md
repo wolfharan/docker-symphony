@@ -56,8 +56,8 @@ sudo nohup python3 app.py
 
 * [Python3](https://docs.python.org/3/) :snake:
 * [Flask](http://flask.pocoo.org/) 
-![Flask](https://raw.githubusercontent.com/pallets/flask/master/artwork/logo-lineart.svg?sanitize=true){width=100px}
-
+![Flask](https://raw.githubusercontent.com/pallets/flask/master/artwork/logo-lineart.svg?sanitize=true)
+<img src="https://raw.githubusercontent.com/pallets/flask/master/artwork/logo-lineart.svg?sanitize=true" width=48>
 * [Requests](https://pypi.org/project/requests/) :turtle:
 * [Python Docker SDK](https://docker-py.readthedocs.io/en/stable/) :whale:
 
