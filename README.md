@@ -8,17 +8,32 @@ Docker symphony is a simple docker container orchestrator for containers running
 2. Checks the number of requests recieved in last t seconds (default is 120s, i.e 2 minutes), if the number of requests exceed base\_scale\_count (default is 20) a new container is started. If number of requests exceed base\_scale\_count\*2 , then 2 new containers are started and so on.
 3. The orchestrator must make requests to the health check API implemented in the application code running in the containers, if the health is not OK ( i.e is if the API doesn't return 200) the container is killed and a new container is start. This must be done every 1 second.
 
-### Prerequisites
+## Where can you use this?
 
-What things you need to install the software and how to install them
+You can use this to orchestrate the **containers running REST API's** on a single server instance. (eg :- AWS EC2 instance)
+Supported HTTP requests are as follows:
+- GET
+- POST
+- PUT
+- DELETE
 
 ```
 Give examples
 ```
 
-### Installing
+## Prerequisites and things to do :-
+- Python3
+'''sudo apt install python3 '''
+- pip3
+''' sudo apt install python3-pip '''
+- Install requirements for the code using 
+''' pip3 install -r requirements '''
+or 
+''' python3 -m pip install -r requirements '''
+- Before you run the orchestrator, you need to do the following things to your REST API code running on docker containers -
+  - implement the health check API with your other API's at the route - /api/v1/_health ( or find /api/v1/_health in app.py and replace with the route of your choice ).The health check API could check if the filesystem is functioning properly if you are using the filesystem to store data or it could be checking if the database connection is still active. 
 
-A step by step series of examples that tell you how to get a development env running
+
 
 Say what the step will be
 
