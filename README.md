@@ -1,4 +1,4 @@
-# Docker Symphony
+# Docker Symphony :whale: :musical_note:
 
 Docker symphony is a simple orchestrator for docker containers running REST API's. It performs load balancing amongst containers, autoscaling(Both scaling up and scaling down) and also implements fault tolerance.
 
@@ -54,10 +54,10 @@ sudo nohup python3 app.py
 
 ## Languages and libraries used
 
-* [Python3](https://docs.python.org/3/) 
+* [Python3](https://docs.python.org/3/) :snake:
 * [Flask](http://flask.pocoo.org/) 
 * [Requests](https://pypi.org/project/requests/) 
-* [Python Docker SDK](https://docker-py.readthedocs.io/en/stable/) 
+* [Python Docker SDK](https://docker-py.readthedocs.io/en/stable/) :whale:
 
 ## License
 
