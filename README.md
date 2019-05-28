@@ -17,21 +17,23 @@ Supported HTTP requests are as follows:
 - PUT
 - DELETE
 
-```
-Give examples
-```
-
 ## Prerequisites 
 - Python3
 ```
 sudo apt install python3 
 ```
 - pip3
-``` sudo apt install python3-pip ```
+``` 
+sudo apt install python3-pip
+ ```
 - Install requirements for the code using 
-``` pip3 install -r requirements ```
+```
+ pip3 install -r requirements 
+```
 or 
-``` python3 -m pip install -r requirements ```
+```
+ python3 -m pip install -r requirements 
+```
 - Before you run the orchestrator, you need to do the following things to your REST API code running on docker containers: implement the health check API with your other API's at the route - /api/v1/_health ( or find /api/v1/_health i.e [line 171](https://github.com/wolfharan/docker-symphony/blob/2518bb795f291f837d0f58e15531d66884d78f0e/app.py#L171) in app.py and replace with the route of your choice ).The health check API could check if the filesystem is functioning properly if you are using the filesystem to store data or it could be checking if the database connection is still active. 
 - Make sure you REST API application container is running before you run the orchestrator. 
 
@@ -43,7 +45,7 @@ You can run it like you run any other python code, The output will be show on th
 ```
 sudo python3 app.py
 ```
-or you could nohup or No Hangups to run the code, this will run the orchestrator in the background. This way, the code keeps running even after you exit the terminal and all the output will appended to nohup.out in the same directory as the code.
+or you could use nohup or No Hangups to run the code, this will run the orchestrator in the background. This way, the code keeps running even after you exit the terminal and all the output will appended to nohup.out in the same directory as the code.
 ```
 sudo nohup python3 app.py
 ```
@@ -59,6 +61,5 @@ sudo nohup python3 app.py
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-Copyright (c) 2019
 
 
