@@ -167,3 +167,4 @@ def fault_thread():
 
 t1=threading.Thread(target=fault_thread)
 t1.start()
+app.run(host='0.0.0.0',port='80',debug=True)
