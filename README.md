@@ -64,5 +64,4 @@ sudo nohup python3 app.py
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 
-Copyright (c) 2019 Hari Charan U
 
