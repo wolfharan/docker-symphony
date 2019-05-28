@@ -23,9 +23,9 @@ Give examples
 
 ## Prerequisites and things to do :-
 - Python3
-'''
+```
 sudo apt install python3 
-'''
+```
 - pip3
 ''' sudo apt install python3-pip '''
 - Install requirements for the code using 
