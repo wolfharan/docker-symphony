@@ -34,7 +34,8 @@ or
 ```
  python3 -m pip install -r requirements 
 ```
-- Change the name of the image in app.py. Find (CTRL +F) the line ``` containers.run ``` and change ``` image= acts ``` to ``` image= your_image_name ``` . You have to make this change in two places ( One in autoscale() and the other in fault_tolerence() , Please ignore the spelling of tolerance in the code :sweat_smile: !)
+- Change the name of the image in app.py. Find (CTRL +F) the line ``` containers.run ``` and change ``` image= acts ``` to ``` image= your_image_name ``` . You have to make this change in two places ( One in autoscale() and the other in fault_tolerence() )
+_Note:-Please ignore the spelling of tolerance in the code :sweat_smile:_
 - Before you run the orchestrator, you need to do the following things to your REST API code that you deploy in docker containers: implement a health check API at the route - /api/v1/_health ( or find /api/v1/_health i.e [line 171](https://github.com/wolfharan/docker-symphony/blob/2518bb795f291f837d0f58e15531d66884d78f0e/app.py#L171) in app.py and replace it with the route of your choice ).The health check API could check if the filesystem is functioning properly if you are using the filesystem to store data or it could be checking if the database connection is still active. 
 
 - Make sure atleast one application container is running before you run the orchestrator. 
